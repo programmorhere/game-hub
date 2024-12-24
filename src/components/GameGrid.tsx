@@ -6,13 +6,13 @@ import GameCardContainer from "./GameCardContainer";
 import { Genre } from "../hooks/useGenres";
 import { Platform } from "../hooks/usePlatforms";
 import { GameQuery } from "../App";
+import { useEffect, useState } from "react";
 
 interface Props {
   gameQuery: GameQuery;
 }
 
-
-const GameGrid = ({gameQuery}: Props) => {
+const GameGrid = ({ gameQuery }: Props) => {
   const { data, error, isLoading } = useGames(gameQuery);
   const skeletons = [1, 2, 3, 4, 5, 6];
 
@@ -30,11 +30,15 @@ const GameGrid = ({gameQuery}: Props) => {
               <GameCardSkeleton />{" "}
             </GameCardContainer>
           ))}
-        {data.map((game) => (
-          <GameCardContainer key={game.id}>
-            <GameCard game={game} />
-          </GameCardContainer>
-        ))}
+        {data?.length > 0 ? (
+          data.map((game) => (
+            <GameCardContainer key={game.id}>
+              <GameCard game={game} />
+            </GameCardContainer>
+          ))
+        ) : (
+          <Text>No Games Found</Text>
+        )}
       </SimpleGrid>
     </>
   );
